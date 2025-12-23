@@ -1,0 +1,343 @@
+/area/maintenance/polovich
+	name = "Polovich"
+	icon_state = "polovich"
+	droning_sound = DRONING_POLOVICHSTAN
+	droning_volume = 20
+	requires_power = FALSE
+	ambience_index = AMBIENCE_GENERIC
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+	area_flags = NO_ALERTS
+	var/play_crazy = TRUE
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_three/habitable.ogg', 'modular_pod/sound/ambi_sounds_three/habitablr.ogg', 'modular_pod/sound/ambi_sounds_three/depth.ogg', 'modular_pod/sound/ambi_sounds_three/vakum.ogg', 'modular_pod/sound/ambi_sounds_three/herribl.ogg', 'modular_pod/sound/ambi_sounds_three/herribl2.ogg', 'modular_pod/sound/ambi_sounds_three/cryer.ogg', 'modular_pod/sound/ambi_sounds_three/screamer.ogg', 'modular_pod/sound/ambi_sounds_three/ourlife.ogg', 'modular_pod/sound/ambi_sounds_three/headexplode.ogg', 'modular_pod/sound/ambi_sounds_three/headexplode2.ogg', 'modular_pod/sound/ambi_sounds_three/castle.ogg', 'modular_pod/sound/ambi_sounds_three/aaaaaa.ogg', 'modular_pod/sound/ambi_sounds_three/aaaaaa2.ogg', 'modular_pod/sound/ambi_sounds_three/cosma.ogg')
+/*
+/area/Entered(atom/movable/arrived, area/old_area)
+	var/area/current_area = get_area(src)
+	if(current_area)
+		SSdroning.area_entered(current_area, client)
+*/
+
+/area/maintenance/polovich/lobby
+	name = "Lobby"
+//	base_lighting_alpha = 255
+//	power_light = FALSE
+//	power_equip = FALSE
+//	power_environ = FALSE
+	requires_power = FALSE
+	power_environ = FALSE
+	power_equip = FALSE
+	power_light = FALSE
+	outdoors = TRUE
+	static_lighting = TRUE
+//	base_lighting_alpha = 255
+//	area_has_base_lighting = TRUE
+	area_flags = NO_ALERTS
+	droning_sound = null
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_out/attackers.ogg', 'modular_pod/sound/ambi_sounds_out/swing.ogg', 'modular_pod/sound/ambi_sounds_out/going.ogg')
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+	sound_environment = SOUND_ENVIRONMENT_NONE
+	var/crazy = TRUE
+
+/area/maintenance/polovich/warwar
+	name = "War Zone"
+	requires_power = FALSE
+	power_environ = FALSE
+	power_equip = FALSE
+	power_light = FALSE
+	outdoors = TRUE
+	static_lighting = TRUE
+	area_flags = NO_ALERTS
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+	sound_environment = SOUND_ENVIRONMENT_NONE
+	ambientsounds = null
+	var/fogger = TRUE
+	var/rainer = TRUE
+
+/*
+/area/maintenance/polovich/warwar/Entered(atom/movable/arrived, area/old_area)
+	. = ..()
+	if(rainer)
+		var/mob/living/living_arrived = arrived
+		if(istype(living_arrived) && living_arrived.client)
+			living_arrived.overlay_fullscreen("redfog", /atom/movable/screen/fullscreen/foge)
+*/
+
+/area/maintenance/polovich/forest
+	name = "Polovich Earth"
+//	base_lighting_alpha = 255
+//	power_light = FALSE
+//	power_equip = FALSE
+//	power_environ = FALSE
+	requires_power = FALSE
+	power_environ = FALSE
+	power_equip = FALSE
+	power_light = FALSE
+	outdoors = TRUE
+	static_lighting = TRUE
+//	base_lighting_alpha = 255
+//	area_has_base_lighting = TRUE
+	area_flags = NO_ALERTS
+	droning_sound = DRONING_POLOVICHSTAN
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+	sound_environment = SOUND_ENVIRONMENT_NONE
+//	ambientsounds_normal = 'modular_pod/sound/loop/surface.ogg'
+	var/fogger = TRUE
+	var/specialfog = FALSE
+	var/lighting_out = TRUE
+	var/ino = FALSE
+	var/specialcolor = FALSE
+/*
+/area/maintenance/polovich/forest/Initialize(mapload)
+	. = ..()
+	if(fogger)
+		for(var/turf/T in src)
+	//		T.temperature = COLDDIRT
+			new /obj/effect/foga(T)
+*/
+/area/maintenance/polovich/forest/Entered(atom/movable/arrived, area/old_area)
+	. = ..()
+	if(specialfog)
+		var/mob/living/living_arrived = arrived
+		if(istype(living_arrived) && living_arrived.client)
+			living_arrived.overlay_fullscreen("redfog", /atom/movable/screen/fullscreen/foge)
+	if(specialcolor)
+		var/mob/living/living_arrived = arrived
+		if(istype(living_arrived) && living_arrived.client)
+			living_arrived.add_client_colour(/datum/client_colour/surface)
+
+/area/maintenance/polovich/forest/Exited(atom/movable/gone, direction)
+	. = ..()
+	if(specialfog)
+		var/mob/living/living_gone = gone
+		if(istype(living_gone))
+			living_gone.clear_fullscreen("redfog")
+	if(specialcolor)
+		var/mob/living/living_arrived = gone
+		if(istype(living_arrived) && living_arrived.client)
+			living_arrived.remove_client_colour(/datum/client_colour/surface)
+
+/area/maintenance/polovich/forest/on_joining_game(mob/living/boarder)
+	. = ..()
+	if(specialfog)
+		if(istype(boarder) && boarder.client)
+			boarder.overlay_fullscreen("redfog", /atom/movable/screen/fullscreen/foge)
+
+/area/maintenance/polovich/forest/reconnect_game(mob/living/boarder)
+	. = ..()
+	if(specialfog)
+		if(istype(boarder) && boarder.client)
+			boarder.overlay_fullscreen("redfog", /atom/movable/screen/fullscreen/foge)
+
+/area/maintenance/polovich/forest/can_ruin
+	area_flags = UNIQUE_AREA | NO_ALERTS
+	icon_state = "polovich_special"
+
+/obj/effect/foga
+	name = "Fog"
+	icon = 'modular_pod/icons/obj/things/things_3.dmi'
+	icon_state = "foga1"
+	layer = FLY_LAYER
+	plane = ABOVE_GAME_PLANE
+//	plane = FLOOR_PLANE
+	density = FALSE
+	anchored = TRUE
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	opacity = FALSE
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
+	can_spawn_various_shit = TRUE
+
+/obj/effect/foga/Initialize(mapload)
+	. = ..()
+	icon_state = pick("foga1", "foga2", "foga3", "foga4")
+	color = pick("#7b7f9b", "#919699", "#748a9c")
+	alpha = rand(200, 255)
+
+/area/maintenance/polovich/forest/can_ruin/fog
+/*
+/area/maintenance/polovich/forest/can_ruin/fog/Initialize(mapload)
+	. = ..()
+	if(fogger)
+		for(var/turf/T in src)
+	//		T.temperature = COLDDIRT
+			new /obj/effect/foga(T)
+*/
+/area/maintenance/polovich/forest/inner
+	static_lighting = TRUE
+	base_lighting_alpha = 1
+	icon_state = "polovich_inner"
+	min_ambience_cooldown = 50 SECONDS
+	max_ambience_cooldown = 75 SECONDS
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_in/italy.ogg', 'modular_pod/sound/ambi_sounds_in/italy2.ogg', 'modular_pod/sound/ambi_sounds_in/italy3.ogg')
+//	ambientsounds = null
+	droning_sound = null
+	ambientsounds_normal = null
+	lighting_out = FALSE
+	ino = TRUE
+	fogger = FALSE
+	specialfog = FALSE
+
+/area/maintenance/polovich/cave
+	name = "Caveira"
+	icon_state = "caveira"
+	static_lighting = TRUE
+	base_lighting_alpha = 1
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+//	ambientsounds_normal = 'modular_pod/sound/loop/caveloop.ogg'
+	area_flags = NO_ALERTS
+	sound_environment = SOUND_ENVIRONMENT_CAVE
+
+/area/maintenance/polovich/cave/can_ruin
+	area_flags = UNIQUE_AREA | NO_ALERTS
+	icon_state = "caveira_special"
+
+/area/maintenance/polovich/life
+	name = "Life"
+	icon_state = "caveira"
+	static_lighting = TRUE
+	base_lighting_alpha = 255
+	ambientsounds_normal = null
+	droning_sound = null
+	area_flags = NO_ALERTS
+	sound_environment = SOUND_ENVIRONMENT_CAVE
+
+/area/maintenance/polovich/forest/prison
+	name = "Prison"
+	icon_state = "polovich_inner"
+	min_ambience_cooldown = 50 SECONDS
+	max_ambience_cooldown = 75 SECONDS
+	static_lighting = TRUE
+	base_lighting_alpha = 1
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_in/italy.ogg', 'modular_pod/sound/ambi_sounds_in/italy2.ogg', 'modular_pod/sound/ambi_sounds_in/italy3.ogg')
+	ambientsounds = null
+	droning_sound = null
+	ambientsounds_normal = null
+	lighting_out = FALSE
+	ino = TRUE
+	fogger = FALSE
+	specialfog = FALSE
+	sound_environment = SOUND_AREA_TUNNEL_ENCLOSED
+
+/area/maintenance/polovich/forest/prisonoutsee
+	name = "Prison Out"
+	icon_state = "polovich"
+	min_ambience_cooldown = 50 SECONDS
+	max_ambience_cooldown = 75 SECONDS
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_in/italy.ogg', 'modular_pod/sound/ambi_sounds_in/italy2.ogg', 'modular_pod/sound/ambi_sounds_in/italy3.ogg')
+	ambientsounds = null
+	droning_sound = null
+	ambientsounds_normal = null
+	lighting_out = FALSE
+	ino = TRUE
+	fogger = FALSE
+	specialfog = FALSE
+	sound_environment = SOUND_ENVIRONMENT_NONE
+
+/area/maintenance/polovich/cavestrue
+	name = "Caves"
+	icon_state = "caveira"
+	static_lighting = TRUE
+	base_lighting_alpha = 1
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_in/caver1.ogg', 'modular_pod/sound/ambi_sounds_in/caver2.ogg', 'modular_pod/sound/ambi_sounds_in/caver3.ogg', 'modular_pod/sound/ambi_sounds_in/caver4.ogg', 'modular_pod/sound/ambi_sounds_in/caver5.ogg', 'modular_pod/sound/ambi_sounds_in/caver6.ogg')
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_in/caver1.ogg', 'modular_pod/sound/ambi_sounds_in/caver2.ogg', 'modular_pod/sound/ambi_sounds_in/caver3.ogg', 'modular_pod/sound/ambi_sounds_in/caver4.ogg', 'modular_pod/sound/ambi_sounds_in/caver5.ogg', 'modular_pod/sound/ambi_sounds_in/caver6.ogg', 'modular_pod/sound/ambi_sounds_three/beyotch_02.ogg')
+	ambientsounds_normal = null
+	area_flags = NO_ALERTS
+	sound_environment = SOUND_ENVIRONMENT_CAVE
+
+/area/maintenance/polovich/cavegumak
+	name = "Gumak"
+	icon_state = "caveira"
+	static_lighting = TRUE
+	base_lighting_alpha = 1
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_in/caver1.ogg', 'modular_pod/sound/ambi_sounds_in/caver2.ogg', 'modular_pod/sound/ambi_sounds_in/caver3.ogg', 'modular_pod/sound/ambi_sounds_in/caver4.ogg', 'modular_pod/sound/ambi_sounds_in/caver5.ogg', 'modular_pod/sound/ambi_sounds_in/caver6.ogg')
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_in/caver1.ogg', 'modular_pod/sound/ambi_sounds_in/caver2.ogg', 'modular_pod/sound/ambi_sounds_in/caver3.ogg', 'modular_pod/sound/ambi_sounds_in/caver4.ogg', 'modular_pod/sound/ambi_sounds_in/caver5.ogg', 'modular_pod/sound/ambi_sounds_in/caver6.ogg', 'modular_pod/sound/ambi_sounds_three/beyotch_02.ogg')
+	ambientsounds_normal = null
+	area_flags = NO_ALERTS
+	sound_environment = SOUND_ENVIRONMENT_CAVE
+	play_crazy = FALSE
+
+/area/maintenance/polovich/cavegumak/Initialize(mapload)
+	. = ..()
+	for(var/turf/T in src)
+		T.temperature = 340.15
+
+/area/maintenance/polovich/forest/forestspawn
+	name = "Polovich Forest Spawn"
+
+/area/maintenance/polovich/forest/rain
+	icon_state = "polovich_no_rain"
+//	base_lighting_alpha = 255
+//	power_light = FALSE
+//	power_equip = FALSE
+//	power_environ = FALSE
+
+/area/maintenance/polovich/forest/rain/village
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+	requires_power = FALSE
+	power_environ = FALSE
+	power_equip = FALSE
+	power_light = FALSE
+	outdoors = TRUE
+	static_lighting = TRUE
+
+/area/maintenance/polovich/evilplace
+	name = "Polovich Evil"
+	area_flags = NO_ALERTS
+
+/area/maintenance/polovich/village
+	name = "Polovich Village"
+	icon_state = "village"
+	droning_sound = DRONING_VILLAGE
+	requires_power = FALSE
+	power_environ = FALSE
+	power_equip = FALSE
+	power_light = FALSE
+	outdoors = TRUE
+	static_lighting = TRUE
+	area_flags = NO_ALERTS
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+	sound_environment = SOUND_ENVIRONMENT_NONE
+
+/area/maintenance/polovich/chaot
+	outdoors = FALSE
+
+/area/maintenance/polovich/forest/rain/chaot
+	min_ambience_cooldown = 60 SECONDS
+	max_ambience_cooldown = 95 SECONDS
+
+/area/maintenance/polovich/catacombs
+	name = "Life"
+	icon_state = "caveira"
+	static_lighting = TRUE
+	base_lighting_alpha = 255
+	ambientsounds_normal = null
+	droning_sound = null
+	area_flags = NO_ALERTS
+	sound_environment = SOUND_ENVIRONMENT_CAVE
+
+/area/maintenance/polovich/night
+	name = "Polovich Purenight"
+	area_flags = NO_ALERTS
+
+/area/maintenance/polovich/forest/club
+	name = "Club"
+	icon_state = "polovich"
+//	droning_sound = DRONING_CLUB
+//	ambientsounds = list('modular_pod/sound/ambi_sounds_three/habitable.ogg', 'modular_pod/sound/ambi_sounds_three/habitablr.ogg', 'modular_pod/sound/ambi_sounds_three/depth.ogg', 'modular_pod/sound/ambi_sounds_three/vakum.ogg', 'modular_pod/sound/ambi_sounds_three/herribl.ogg', 'modular_pod/sound/ambi_sounds_three/herribl2.ogg', 'modular_pod/sound/ambi_sounds_three/cryer.ogg', 'modular_pod/sound/ambi_sounds_three/screamer.ogg', 'modular_pod/sound/ambi_sounds_three/ourlife.ogg', 'modular_pod/sound/ambi_sounds_three/headexplode.ogg', 'modular_pod/sound/ambi_sounds_three/headexplode2.ogg', 'modular_pod/sound/ambi_sounds_three/castle.ogg')
+	static_lighting = TRUE
+	base_lighting_alpha = 1
+	lighting_out = FALSE
+	ino = TRUE
+	fogger = FALSE
+	specialfog = FALSE
+	sound_environment = SOUND_AREA_TUNNEL_ENCLOSED
+

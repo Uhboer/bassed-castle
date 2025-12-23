@@ -1,0 +1,41 @@
+{
+	"version": 1,
+	"map_name": "Burner's Town",
+	"map_path": "_podpol/map_files/foresttown",
+	"map_lore": "Baron Burner's town. A nasty place.",
+	"map_file": "forester.dmm",
+	"station_name": "Burner's Town",
+	"respawn_allowed": true,
+	"space_ruin_levels": 0,
+	"space_empty_levels": 0,
+	"surface_ruin_levels": 0,
+	"surface_empty_levels": 0,
+	"cave_ruin_levels": 0,
+	"cave_empty_levels": 0,
+	"shuttles": {
+		"cargo": "cargo_baluarte",
+		"emergency": "emergency_delta"
+	},
+	"traits": [
+		{
+			"Up": 1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/open/openspace"
+		},
+        {
+            "Down": -1,
+            "Up": 1,
+            "Station": true,
+            "Gravity": true,
+            "Baseturf": "/turf/open/openspace"
+        },
+		{
+			"Down": -1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/closed/wall/purple/nocling"
+		}
+	],
+	"minetype": "none"
+}

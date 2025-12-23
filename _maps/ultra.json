@@ -1,0 +1,43 @@
+{
+	"version": 1,
+	"map_name": "Ultra",
+	"map_lore": "Ultra war.",
+	"map_path": "_septic/map_files/Ultra",
+	"map_file": "ultra.dmm",
+	"station_name": "Ultra",
+	"respawn_allowed": true,
+	"war_gamemode": true,
+	"space_ruin_levels": 0,
+	"space_empty_levels": 0,
+	"surface_ruin_levels": 0,
+	"surface_empty_levels": 0,
+	"cave_ruin_levels": 0,
+	"cave_empty_levels": 0,
+	"shuttles": {
+		"cargo": "cargo_baluarte",
+		"emergency": "emergency_delta"
+	},
+	"traits": [
+		{
+			"Up": 1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/open/openspace/norm"
+		},
+		{
+			"Down": -1,
+			"Up": 1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/open/openspace/norm"
+		},
+		{
+			"Down": -1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/closed/wall/purple/nocling"
+		}
+	],
+
+	"minetype": "none"
+}

@@ -1,0 +1,14 @@
+"a" = (/obj/structure/codec/window/green,/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"i" = (/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"u" = (/turf/template_noop,/area/template_noop)
+"L" = (/turf/podpol/wall/gumak,/area/template_noop)
+
+(1,1,1) = {"
+uuuuuuu
+uLLaLLu
+uLiiiLu
+uaiiiau
+uLiiiLu
+uLiiiLu
+uuuuuuu
+"}

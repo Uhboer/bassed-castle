@@ -1,0 +1,49 @@
+{
+	"version": 1,
+	"map_name": "Zurvai",
+	"map_lore": "A constantly reshaping story about the rich lives of creatures.",
+	"map_path": "_maya/zurvai",
+	"map_file": "zurvai.dmm",
+	"station_name": "Zurvai",
+	"respawn_allowed": true,
+	"space_ruin_levels": 0,
+	"space_empty_levels": 0,
+	"surface_ruin_levels": 0,
+	"surface_empty_levels": 0,
+	"cave_ruin_levels": 0,
+	"cave_empty_levels": 0,
+	"shuttles": {
+		"cargo": "cargo_baluarte",
+		"emergency": "emergency_delta"
+	},
+	"traits": [
+		{
+			"Up": 1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/open/openspace/norm"
+		},
+		{
+			"Down": -1,
+			"Up": 1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/open/openspace/norm"
+		},
+		{
+			"Down": -1,
+			"Up": 1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/open/openspace/norm"
+		},
+		{
+			"Down": -1,
+			"Station": true,
+			"Gravity": true,
+			"Baseturf": "/turf/closed/wall/purple/nocling"
+		}
+	],
+
+	"minetype": "none"
+}

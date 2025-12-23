@@ -1,0 +1,16 @@
+"a" = (/turf/template_noop,/area/template_noop)
+"h" = (/obj/structure/closet/crate/wooden,/obj/item/podpol_weapon/spear/wooden,/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"r" = (/obj/structure/codec/window/green,/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"s" = (/obj/structure/bed/mattress,/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"w" = (/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"V" = (/turf/podpol/wall/gumak,/area/template_noop)
+
+(1,1,1) = {"
+aaaaaaa
+aVVwVVa
+aVwwwVa
+arwwwra
+aVhwsVa
+aVVrVVa
+aaaaaaa
+"}

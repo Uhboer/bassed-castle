@@ -1,0 +1,17 @@
+"a" = (/turf/podpol/wall/stonaa/kirpichi,/area/template_noop)
+"j" = (/turf/open/floor/plating/polovich/way/maya/grinch,/area/template_noop)
+"u" = (/obj/structure/closet/crate,/obj/item/gun/ballistic/shotgun/bolas,/turf/open/floor/plating/polovich/way/maya/grinch,/area/template_noop)
+"O" = (/turf/template_noop,/area/template_noop)
+
+(1,1,1) = {"
+OOOOOOOOOO
+OajaaaaaaO
+OajjjjjjjO
+OajaajajaO
+OajaujajaO
+OajajjajaO
+OajajaajaO
+OjjjjjjjaO
+OaaaaaajaO
+OOOOOOOOOO
+"}

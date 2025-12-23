@@ -1,0 +1,11 @@
+"a" = (/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"t" = (/turf/template_noop,/area/template_noop)
+"O" = (/turf/podpol/wall/gumak,/area/template_noop)
+
+(1,1,1) = {"
+tOOOOOOOOt
+taaaaaaaaa
+taaaaaaaat
+aaaaaaaaat
+tOOOOOOOOt
+"}

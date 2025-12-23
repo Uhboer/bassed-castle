@@ -1,0 +1,33 @@
+"a" = (/obj/effect/turf_decal/tile/blue{dir = 1},/obj/effect/turf_decal/tile/blue,/obj/machinery/light/small/directional/north,/obj/structure/table/reinforced,/obj/item/pizzabox/pineapple,/obj/item/pizzabox/mushroom,/turf/open/floor/plating/polovich/red,/area/shuttle/escape)
+"b" = (/obj/effect/turf_decal/tile/blue{dir = 4},/obj/effect/turf_decal/tile/blue{dir = 8},/obj/machinery/light/small/directional/north,/obj/structure/table/reinforced,/turf/open/floor/plating/polovich/red,/area/shuttle/escape)
+"c" = (/turf/closed/wall/pink_crazy/nocling,/area/shuttle/escape)
+"d" = (/obj/structure/chair/comfy/shuttle{dir = 1},/turf/open/floor/plating/polovich/kapec,/area/shuttle/escape)
+"e" = (/turf/open/floor/plating/polovich/pinkbrick,/area/shuttle/escape)
+"f" = (/obj/effect/turf_decal/delivery{color = "#801000"},/obj/machinery/door/airlock/maintenance,/turf/open/floor/iron/dark,/area/shuttle/escape)
+"g" = (/obj/structure/fluff/statueiron/third,/turf/open/floor/plating/polovich/kapec/two,/area/shuttle/escape)
+"h" = (/obj/structure/lattice/catwalk,/obj/structure/fans/tiny,/obj/machinery/door/poddoor/shutters/preopen{id = "hungus"},/turf/open/floor/plating,/area/shuttle/escape)
+"j" = (/turf/open/floor/plating/polovich/kapec/two,/area/shuttle/escape)
+"k" = (/obj/effect/spawner/structure/window/reinforced,/turf/open/floor/low_wall/reinforced,/area/shuttle/escape)
+"l" = (/obj/structure/table/reinforced,/obj/item/reagent_containers/food/drinks/bottle/whiskey,/turf/open/floor/plating/polovich/kapec/two,/area/shuttle/escape)
+"m" = (/obj/structure/table/reinforced,/obj/item/storage/firstaid/morango{pixel_y = 12; pixel_x = 5},/obj/item/reagent_containers/food/drinks/bottle/wine,/turf/open/floor/plating/polovich/kapec/two,/area/shuttle/escape)
+"n" = (/obj/machinery/door/keycard/denominator/podozl/akt/controller,/turf/open/floor/plating/polovich/red,/area/shuttle/escape)
+"o" = (/obj/structure/lampstand,/turf/open/floor/plating/polovich/kapec/two,/area/shuttle/escape)
+"C" = (/obj/structure/lattice/catwalk,/obj/structure/fans/tiny,/obj/machinery/door/poddoor/shutters/preopen{id = "hungus"},/obj/docking_port/mobile/emergency{dir = 1; name = "baluarte emergency shuttle"},/turf/open/floor/plating,/area/shuttle/escape)
+"I" = (/turf/template_noop,/area/shuttle/escape)
+"M" = (/turf/closed/wall/r_wall,/area/shuttle/escape)
+
+(1,1,1) = {"
+IckkcI
+IcabcI
+IcddcI
+MMnnMM
+MgjjgM
+kdeedk
+kdjjdk
+MleemM
+kdjjdk
+kdeedk
+MojjoM
+MMffMM
+IMhCMI
+"}

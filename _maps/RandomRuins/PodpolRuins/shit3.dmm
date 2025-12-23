@@ -1,0 +1,15 @@
+"a" = (/turf/podpol/wall/gumak,/area/template_noop)
+"j" = (/obj/structure/closet/crate/wooden/crazy,/turf/open/floor/plating/polovich/way/maya/krasa,/area/template_noop)
+"m" = (/obj/structure/barbwire,/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"I" = (/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"Z" = (/turf/template_noop,/area/template_noop)
+
+(1,1,1) = {"
+ZZZZZZZ
+ZaamaaZ
+ZammmaZ
+ZaIjIaZ
+ZammmaZ
+ZaamaaZ
+ZZZZZZZ
+"}

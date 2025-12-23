@@ -1,0 +1,1 @@
+#define DEFAULT_LOBBY_IMAGE_PATH null

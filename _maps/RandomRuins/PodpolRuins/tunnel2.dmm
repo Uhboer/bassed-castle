@@ -1,0 +1,17 @@
+"a" = (/turf/podpol/wall/gumak,/area/template_noop)
+"o" = (/obj/structure/mineexplosive/mineplit/pulsator,/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"L" = (/turf/open/floor/plating/polovich/way/maya/tkan,/area/template_noop)
+"M" = (/turf/template_noop,/area/template_noop)
+
+(1,1,1) = {"
+MLMMM
+aLLLa
+aLLoa
+aLoLa
+aoLLa
+aLLoa
+aLoLa
+aoLLa
+aLLLa
+MMMLM
+"}

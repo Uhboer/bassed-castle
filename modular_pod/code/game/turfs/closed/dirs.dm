@@ -1,0 +1,583 @@
+/turf/podpol
+	name = "Wall"
+	desc = "Creepy!"
+	icon = 'icons/wall.dmi'
+	icon_state = "wall"
+	base_icon_state = "wall"
+	var/wallis = TRUE
+	var/state1 = "wall1"
+	var/state2 = "wall2"
+	baseturfs = /turf/open/floor/plating/polovich/way/maya/tkan
+	var/personal_turf = /turf/open/floor/plating/polovich/way/maya/tkan
+	var/random = FALSE
+	var/can_liquid = FALSE
+	var/air = null
+	var/active_hotspot = null
+	var/planetary_atmos = null
+	var/excited = null
+	var/excited_group = null
+
+/turf/podpol/Initialize(mapload)
+	. = ..()
+	if(wallis)
+		update_icon_pod()
+
+/*
+/turf/podpol/wall/Destroy()
+	if (cantbreak)
+		return ..() // Still call base regardless, so base cleanup (like qdel) happens
+
+	// Remove random objects if this wall can be random (legacy/compat)
+	var/turf_type = personal_turf || /turf/open/floor/plating/polovich/way/maya/tkan
+	if (random)
+		for (var/obj/O in src.contents)
+			if(O)
+				qdel(O)
+
+	// Call parent destroy BEFORE changing turf to handle qdel chain cleanly
+	. = ..() // Do not comment this out — prevents orphan atoms and deletion bugs
+
+	// Replace self with chosen open turf (if not already qdel'd via parent)
+	if(src && turf_type)
+		ChangeTurf(turf_type, null, CHANGETURF_IGNORE_AIR)
+
+	// Drop ores if mineable and ore_amount > 0
+	if (mineable && ore_amount > 0 && ore_type)
+		var/turf/oreloc = get_turf(src)
+		if(oreloc)
+			for (var/i in 1 to ore_amount)
+				new ore_type(oreloc)
+
+	// Pollution/dust, SFX, or water/fluids logic goes here if applicable to *all* wall destruction
+	var/turf/mineturf = get_turf(src)
+	if(mineturf && istype(mineturf, /turf))
+		mineturf.pollute_turf(/datum/pollutant/dust, 200)
+		playsound(src, 'sound/effects/break_stone.ogg', 50, TRUE)
+
+		if (can_liquid && prob(20))
+			var/reagent = /datum/reagent/water
+			var/amount = rand(50, 150)
+			mineturf.add_liquid(reagent, amount, TRUE)
+			playsound(mineturf, 'sound/effects/slosh.ogg', 30, TRUE)
+
+	return .
+*/
+
+/// For explosive/mining/other events, call Destroy() ONLY, and do not duplicate wall destruction here
+/turf/podpol/wall/ex_act(severity, target)
+	if (cantbreak)
+		return
+	if (severity >= EXPLODE_HEAVY)
+//		var/turf_type = personal_turf || /turf/open/floor/plating/polovich/way/maya/tkan
+//		ScrapeAway(flags = CHANGETURF_IGNORE_AIR)
+		var/flags = NONE
+		var/old_type = type
+		if(defer_change) // TODO: make the defer change var a var for any changeturf flag
+			flags = CHANGETURF_DEFER_CHANGE
+		var/turf/open/mined = ScrapeAway(null, flags)
+		addtimer(CALLBACK(src, .proc/AfterChange, flags, old_type), 1, TIMER_UNIQUE)
+		mined.update_visuals()
+		return TRUE
+	if (severity == EXPLODE_LIGHT)
+		if (prob(50))
+//			var/turf_type = personal_turf || /turf/open/floor/plating/polovich/way/maya/tkan
+//			ScrapeAway(flags = CHANGETURF_IGNORE_AIR)
+			var/flags = NONE
+			var/old_type = type
+			if(defer_change) // TODO: make the defer change var a var for any changeturf flag
+				flags = CHANGETURF_DEFER_CHANGE
+			var/turf/open/mined = ScrapeAway(null, flags)
+			addtimer(CALLBACK(src, .proc/AfterChange, flags, old_type), 1, TIMER_UNIQUE)
+			mined.update_visuals()
+			return TRUE
+
+/*
+	if(random)
+		for(var/obj/O in src.contents) //Eject contents!
+			qdel(O)
+
+	var/flags = NONE
+	var/old_type = type
+	if(defer_change)
+		flags = CHANGETURF_DEFER_CHANGE|CHANGETURF_INHERIT_AIR
+//	var/turf/mined = ScrapeAway(null, flags)
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/turf, AfterChange), flags, old_type), 1, TIMER_UNIQUE)
+	playsound(src, 'sound/effects/break_stone.ogg', 50, TRUE)
+*/
+
+/turf/podpol/proc/update_icon_pod()
+	icon_state = state2
+	var/list/surround = list(0, 0, 0, 0) //up, down, right, left
+	if(istype(locate(x, y + 1, z), type))
+		surround[1] = 1
+	if(istype(locate(x, y - 1, z), type))
+		surround[2] = 1
+	if(istype(locate(x + 1, y, z), type))
+		surround[3] = 1
+	if(istype(locate(x - 1, y, z), type))
+		surround[4] = 1
+	switch(list2params(surround))
+		if("1&0&0&0")
+			dir = NORTH
+		if("0&1&0&0")
+			dir = SOUTH
+		if("0&0&1&0")
+			dir = EAST
+		if("0&0&0&1")
+			dir = WEST
+		if("0&1&0&1")
+			dir = NORTHWEST
+		if("1&0&0&1")
+			dir = SOUTHWEST
+		if("0&1&1&0")
+			dir = NORTHEAST
+		if("1&0&1&0")
+			dir = SOUTHEAST
+
+		if("1&0&1&1")
+			icon_state = state1
+			dir = SOUTHEAST
+		if("0&1&1&1")
+			icon_state = state1
+			dir = SOUTHWEST
+		if("1&1&1&0")
+			icon_state = state1
+			dir = NORTHEAST
+		if("1&1&0&1")
+			icon_state = state1
+			dir = NORTHWEST
+		if("1&1&0&0")
+			icon_state = state1
+			dir = SOUTH
+		if("0&0&1&1")
+			icon_state = state1
+			dir = NORTH
+		if("1&1&1&1")
+			icon_state = state1
+			dir = EAST
+		else
+			icon_state = state1
+			dir = WEST
+
+/*
+/turf/podpol/wall/Destroy()
+	if(cantbreak)
+		return
+//	ChangeTurf(personal_turf, null, CHANGETURF_IGNORE_AIR)
+//	for(var/turf/podpol/wall/F in oview(1, personal_turf))
+//		F.update_icon_pod()
+*/
+
+/turf/podpol/wall
+//	plane = GAME_PLANE
+	inspect_icon_state = "wall"
+	max_integrity = 500
+	blocks_air = TRUE
+	pass_flags_self = PASSCLOSEDTURF
+	density = TRUE
+	layer = CLOSED_TURF_LAYER
+	opacity = TRUE
+	clingable = TRUE
+	var/cantbreak = FALSE
+	var/powerwall = 15
+	var/hardness = 40
+	var/mineable = TRUE
+	var/mine_hp = 3
+	var/ore_type = /obj/item/stone
+	var/ore_amount = 1
+	var/ancstone = FALSE
+	var/defer_change = TRUE
+
+/turf/podpol/wall/on_rammed(mob/living/carbon/rammer)
+	rammer.ram_stun()
+	var/smash_sound = pick('modular_septic/sound/gore/smash1.ogg',
+						'modular_septic/sound/gore/smash2.ogg',
+						'modular_septic/sound/gore/smash3.ogg')
+	playsound(src, smash_sound, 75)
+	rammer.sound_hint()
+
+/turf/podpol/wall/process_cell()
+    return
+
+/*
+	if(target == src)
+//		qdel(src)
+		ChangeTurf(/turf/open/floor/plating/polovich/codec/dirt/mud, null, CHANGETURF_IGNORE_AIR)
+		return
+
+	switch(severity)
+		if(EXPLODE_DEVASTATE)
+			//SN src = null
+			ChangeTurf(/turf/open/floor/plating/polovich/codec/dirt/mud, null, CHANGETURF_IGNORE_AIR)
+			var/turf/NT = ScrapeAway()
+			NT.contents_explosion(severity, target)
+			return
+		if(EXPLODE_HEAVY)
+			ChangeTurf(/turf/open/floor/plating/polovich/codec/dirt/mud, null, CHANGETURF_IGNORE_AIR)
+		if(EXPLODE_LIGHT)
+			if (prob(hardness))
+				ChangeTurf(/turf/open/floor/plating/polovich/codec/dirt/mud, null, CHANGETURF_IGNORE_AIR)
+*/
+//	if(!density)
+//		..()
+
+/turf/podpol/wall/attackby(obj/item/W, mob/living/carbon/user, params)
+	. = ..()
+	if(.)
+		return
+
+	if(user.a_intent == INTENT_GRAB)
+		if(istype(W, /obj/item/grab))
+			var/obj/item/grab/G = W
+			if((G.grasped_part?.body_zone == BODY_ZONE_PRECISE_FACE) || (G.grasped_part?.body_zone == BODY_ZONE_HEAD) || (G.grasped_part?.body_zone == BODY_ZONE_PRECISE_NECK))
+				var/mob/living/carbon/human/GR = user.pulling
+				if(GR == null)
+					return
+				if(GR.body_position == STANDING_UP)
+					var/obj/item/bodypart/head = GR.get_bodypart_nostump(BODY_ZONE_HEAD)
+					if(head)
+						var/damage = ((GET_MOB_ATTRIBUTE_VALUE(user, STAT_STRENGTH)/2) + src?.powerwall)
+						GR.visible_message(span_pinkdang("[user] hits [GR]'s head on [src]!"))
+						var/armor_block = GR.run_armor_check(head, MELEE, sharpness = NONE)
+						var/armor_reduce = GR.run_subarmor_check(head, MELEE, sharpness = NONE)
+						GR.apply_damage(damage, BRUTE, head, armor_block, wound_bonus = 3, sharpness = NONE, reduced = armor_reduce)
+//						head.receive_damage(brute = damage, wound_bonus = 3, sharpness = null)
+						user.changeNext_move(17)
+						user.adjustFatigueLoss(6)
+						playsound(get_turf(GR), 'modular_pod/sound/eff/punch 1.ogg', 80, 0)
+	if(mineable)
+		if(mine_hp > 0)
+			if(W.can_dig)
+				user.visible_message(span_notice("[user] digs [src] with [W]."),span_notice("I dig [src] with [W]."), span_hear("I hear digging."))
+				user.changeNext_move(W.attack_delay)
+				user.adjustFatigueLoss(8)
+				W.damageItem(10)
+				playsound(get_turf(src), 'modular_pod/sound/eff/hitwallpick.ogg', 90 , FALSE, FALSE)
+				user.sound_hint()
+				mine_hp -= 1
+				var/diceroll = user.diceroll(GET_MOB_SKILL_VALUE(user, SKILL_MASONRY), context = DICE_CONTEXT_PHYSICAL)
+				if(diceroll >= DICE_SUCCESS)
+					user.visible_message(span_notice("[user] mines ore."),span_notice("I mine ore."), span_hear("I hear digging."))
+					new ore_type(get_turf(user), ore_amount)
+					user.client.prefs.adjust_bobux(1, "<span class='bobux'>I mine ore! +1 Kaotik!</span>")
+					user.flash_kaosgain()
+				if(diceroll == DICE_CRIT_FAILURE)
+					var/dicerolll = user.diceroll(GET_MOB_ATTRIBUTE_VALUE(user, STAT_PERCEPTION), context = DICE_CONTEXT_MENTAL)
+					if(dicerolll == DICE_CRIT_FAILURE)
+						user.visible_message(span_notice("[user] failed to dig [src] with [W]!"),span_notice("I failed to dig [src] with [W]!"), span_hear("I hear digging."))
+						user.apply_damage(15, BRUTE, BODY_ZONE_HEAD, user.run_armor_check(BODY_ZONE_HEAD, MELEE), wound_bonus = 5, sharpness = NONE)
+					else
+						user.visible_message(span_notice("[user] stupidly digs [src] with [W]."),span_notice("I stupidly dig [src] with [W]."), span_hear("I hear digging."))
+		else
+			if(W.can_dig)
+				user.visible_message(span_notice("[user] ruins [src] with [W]."),span_notice("I ruin [src] with [W]."), span_hear("I hear digging."))
+				user.changeNext_move(W.attack_delay)
+				user.adjustFatigueLoss(8)
+				W.damageItem(10)
+				user.sound_hint()
+
+//				if(ancstone)
+//s					if(prob(50))
+//						new /obj/item/ruda/steel(get_turf(src))
+//				var/turf/turfa = get_turf(src)
+//				if (mineable && ore_amount > 0 && ore_type)
+//					if(turfa)
+//						for (var/i in 1 to ore_amount)
+//							new ore_type(turfa)
+
+				var/cancanliquid = can_liquid
+//				var/turf_type = personal_turf || /turf/open/floor/plating/polovich/way/maya/tkan
+//				ScrapeAway(flags = CHANGETURF_IGNORE_AIR)
+				var/flags = NONE
+				var/old_type = type
+				if(defer_change) // TODO: make the defer change var a var for any changeturf flag
+					flags = CHANGETURF_DEFER_CHANGE
+				var/turf/open/mined = ScrapeAway(null, flags)
+				addtimer(CALLBACK(src, .proc/AfterChange, flags, old_type), 1, TIMER_UNIQUE)
+				mined.update_visuals()
+
+				var/turf/turfa = get_turf(src)
+				if(turfa && istype(turfa, /turf))
+					turfa.pollute_turf(/datum/pollutant/dust, 200)
+					playsound(turfa, 'sound/effects/break_stone.ogg', 50, TRUE)
+
+				if (turfa && cancanliquid && prob(20))
+					var/reagent = /datum/reagent/water
+					var/amount = rand(50, 150)
+					turfa.add_liquid(reagent, amount, TRUE)
+					playsound(turfa, 'sound/effects/slosh.ogg', 30, TRUE)
+
+//				var/spawn_water_yes = FALSE
+//				if(can_liquid)
+//					if(prob(20))
+//						spawn_water_yes = TRUE
+
+//				var/flags = NONE
+//				var/old_type = type
+//				if(defer_change)
+//					flags = CHANGETURF_DEFER_CHANGE|CHANGETURF_INHERIT_AIR
+//				var/turf/mined = ScrapeAway(null, flags)
+//				addtimer(CALLBACK(src, TYPE_PROC_REF(/turf, AfterChange), flags, old_type), 1, TIMER_UNIQUE)
+//				playsound(src, 'sound/effects/break_stone.ogg', 50, TRUE)
+//				mined.update_visuals()
+
+//				var/turf/mineturf = get_turf(src)
+//				mineturf.pollute_turf(/datum/pollutant/dust, 200)
+
+//				if(spawn_water_yes)
+//					var/reagent
+//					var/amount = rand(50, 150)
+//					reagent = /datum/reagent/water
+//					mineturf.add_liquid(reagent, amount, TRUE)
+//					playsound(mineturf, 'sound/effects/slosh.ogg', 30, TRUE)
+
+				// Chance to spawn liquid from broken wall
+//						switch(rand(1, 4))
+//							if(1)
+//								reagent = /datum/reagent/water
+//								to_chat(user, span_warning("Water seeps out from the wall!"))
+//							if(2)
+//								reagent = /datum/reagent/fuel
+//								to_chat(user, span_danger("A flammable liquid drips from the wall!"))
+//							if(3)
+//								reagent = /datum/reagent/blood
+//								to_chat(user, span_warning("Blood oozes from the wall!"))
+//							if(4)
+//								reagent = /datum/reagent/toxin/acid
+//								to_chat(user, span_danger("Corrosive acid leaks from the wall!"))
+
+						// Create the liquid on the turf
+
+				// Ensure dust becomes active in the pollution system
+//					if(!QDELETED(mineturf))
+//						qdel(mineturf)
+
+/turf/podpol/wall/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_stone[rand(1,3)].ogg"
+
+/turf/podpol/wall/darkyw
+	icon = 'modular_pod/icons/turf/closed/europ.dmi'
+
+/turf/podpol/wall/darkyw/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_wood[rand(1,5)].ogg"
+
+/turf/podpol/wall/grewich
+	icon = 'modular_pod/icons/turf/closed/grewich.dmi'
+
+/turf/podpol/wall/grewich/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_metal[rand(1,5)].ogg"
+
+/turf/podpol/wall/steel
+	icon = 'modular_pod/icons/turf/closed/steel.dmi'
+	cantbreak = TRUE
+	mineable = FALSE
+
+/turf/podpol/wall/steel/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_metal[rand(1,5)].ogg"
+
+/turf/podpol/wall/gray
+	icon = 'modular_pod/icons/turf/closed/gray.dmi'
+	mine_hp = 10
+
+/turf/podpol/wall/gray/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_metal[rand(1,5)].ogg"
+
+/turf/podpol/wall/woodar
+	icon = 'modular_pod/icons/turf/closed/woodar.dmi'
+
+/turf/podpol/wall/woodar/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_wood[rand(1,5)].ogg"
+
+/turf/podpol/wall/woodark
+	icon = 'modular_pod/icons/turf/closed/wodark.dmi'
+
+/turf/podpol/wall/woodark/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_wood[rand(1,5)].ogg"
+
+/turf/podpol/wall/rostik
+	icon = 'modular_pod/icons/turf/closed/rusty.dmi'
+	cantbreak = FALSE
+	mineable = TRUE
+	mine_hp = 5
+
+/turf/podpol/wall/rostik/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_metal[rand(1,5)].ogg"
+
+/turf/podpol/wall/stonaa
+	icon = 'modular_pod/icons/turf/closed/stonaa.dmi'
+	mine_hp = 5
+
+/turf/podpol/wall/stonaa/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_stone[rand(1,3)].ogg"
+
+/turf/podpol/wall/stal
+	icon = 'modular_pod/icons/turf/closed/stal.dmi'
+	cantbreak = TRUE
+	mineable = FALSE
+
+/turf/podpol/wall/stal/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_metal[rand(1,5)].ogg"
+
+/turf/podpol/wall/shroom
+	icon = 'modular_pod/icons/turf/closed/cavero.dmi'
+	mine_hp = 1
+	baseturfs = /turf/open/floor/plating/polovich/way/maya/tkan
+	personal_turf = /turf/open/floor/plating/polovich/way/dirtyd
+	random = TRUE
+
+/turf/podpol/wall/shroom/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_wood[rand(1,5)].ogg"
+
+/turf/podpol/wall/shroom/Initialize(mapload)
+	. = ..()
+	if(random)
+		if(prob(30))
+			new /obj/structure/sign/poster/contraband/codec/lians(get_turf(src))
+
+/turf/podpol/wall/caver
+	icon = 'modular_pod/icons/turf/closed/mount.dmi'
+	ancstone = TRUE
+	random = TRUE
+
+/turf/podpol/wall/caver/Initialize(mapload)
+	. = ..()
+	if(random)
+		if(prob(30))
+			new /obj/structure/sign/poster/contraband/codec/lians(get_turf(src))
+
+/turf/podpol/wall/caver/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_stone[rand(1,3)].ogg"
+
+/turf/podpol/wall/caverak
+	icon = 'modular_pod/icons/turf/closed/cavera.dmi'
+	ancstone = TRUE
+	random = TRUE
+
+/turf/podpol/wall/caverak/Initialize(mapload)
+	if(random)
+		if(prob(27))
+			new /obj/structure/sign/poster/contraband/codec/purpella(get_turf(src))
+	. = ..()
+
+/turf/podpol/wall/caverak/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_stone[rand(1,3)].ogg"
+
+/turf/podpol/wall/gumak
+	icon = 'modular_pod/icons/turf/closed/gumak.dmi'
+	mineable = TRUE
+	random = TRUE
+	can_liquid = TRUE
+	ore_type = /obj/item/ruda/steel
+
+/turf/podpol/wall/gumak/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_stone[rand(1,3)].ogg"
+
+/turf/podpol/wall/gumak/Initialize(mapload)
+	. = ..()
+	if(random)
+		if(prob(5))
+			new /obj/structure/sign/poster/contraband/codec/balbosh(get_turf(src))
+
+/turf/podpol/wall/peshera
+	icon = 'modular_pod/icons/turf/closed/stoner.dmi'
+	mineable = TRUE
+	random = TRUE
+	can_liquid = TRUE
+
+/turf/podpol/wall/peshera/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_stone[rand(1,3)].ogg"
+
+/turf/podpol/wall/nomalnaya
+	icon = 'modular_pod/icons/turf/closed/normala.dmi'
+	mineable = TRUE
+
+/turf/podpol/wall/nomalnaya/get_projectile_hitsound(obj/projectile/projectile)
+	return "modular_septic/sound/bullet/projectile_impact/ric_stone[rand(1,3)].ogg"
+
+/*
+/turf/open/floor/plating/polovich/way/evilcaver
+	name = "Грязь"
+	icon = 'modular_pod/icons/turf/closed/caverfloor'
+	icon_state = "evilmud"
+	footstep = FOOTSTEP_SAND
+	barefootstep = FOOTSTEP_SAND
+	clawfootstep = FOOTSTEP_SAND
+	heavyfootstep = FOOTSTEP_SAND
+	var/wallis = TRUE
+	var/cantbreak = TRUE
+
+/turf/open/floor/plating/polovich/way/evilcaver/Initialize(mapload)
+	. = ..()
+	if(wallis)
+		update_icon_pod()
+
+/turf/open/floor/plating/polovich/way/evilcaver/proc/update_icon_pod()
+	icon_state = state2
+	var/list/surround = list(0, 0, 0, 0) //up, down, right, left
+	if(istype(locate(x, y + 1, z), type))
+		surround[1] = 1
+	if(istype(locate(x, y - 1, z), type))
+		surround[2] = 1
+	if(istype(locate(x + 1, y, z), type))
+		surround[3] = 1
+	if(istype(locate(x - 1, y, z), type))
+		surround[4] = 1
+	switch(list2params(surround))
+		if("1&0&0&0")
+			dir = NORTH
+		if("0&1&0&0")
+			dir = SOUTH
+		if("0&0&1&0")
+			dir = EAST
+		if("0&0&0&1")
+			dir = WEST
+		if("0&1&0&1")
+			dir = NORTHWEST
+		if("1&0&0&1")
+			dir = SOUTHWEST
+		if("0&1&1&0")
+			dir = NORTHEAST
+		if("1&0&1&0")
+			dir = SOUTHEAST
+
+		if("1&0&1&1")
+			icon_state = state1
+			dir = SOUTHEAST
+		if("0&1&1&1")
+			icon_state = state1
+			dir = SOUTHWEST
+		if("1&1&1&0")
+			icon_state = state1
+			dir = NORTHEAST
+		if("1&1&0&1")
+			icon_state = state1
+			dir = NORTHWEST
+		if("1&1&0&0")
+			icon_state = state1
+			dir = SOUTH
+		if("0&0&1&1")
+			icon_state = state1
+			dir = NORTH
+		if("1&1&1&1")
+			icon_state = state1
+			dir = EAST
+		else
+			icon_state = state1
+			dir = WEST
+
+/turf/open/floor/plating/polovich/way/evilcaver/Destroy()
+	if(cantbreak)
+		return
+	ChangeTurf(personal_turf, null, CHANGETURF_IGNORE_AIR)
+	for(var/turf/open/floor/plating/polovich/way/evilcaver/F in oview(1, personal_turf))
+		F.update_icon_pod()
+	..()
+*/
+
+/turf/podpol/wall/rostik/acida
+	icon = 'modular_pod/icons/turf/closed/acida.dmi'
+	cantbreak = TRUE
+	mineable = FALSE
+
+/turf/podpol/wall/stonaa/kirpichi
+	icon = 'modular_pod/icons/turf/closed/kirpich.dmi'

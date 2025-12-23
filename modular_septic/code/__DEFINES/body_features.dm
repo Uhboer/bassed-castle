@@ -1,0 +1,6 @@
+// Ширина персонажа
+#define HUMAN_WIDTH_THIN 1
+#define HUMAN_WIDTH_SLIGHTLY_THIN 2
+#define HUMAN_WIDTH_AVERAGE 3
+#define HUMAN_WIDTH_SLIGHTLY_WIDE 4
+#define HUMAN_WIDTH_WIDE 5

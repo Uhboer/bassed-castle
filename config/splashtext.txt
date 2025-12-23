@@ -1,0 +1,23 @@
+# Splash text that appears on the title screen as well as the hub
+# The game will pick one of these to be displayed per round, if possible
+SPLASHTEXT Я ем этого петушару!
+SPLASHTEXT Mr Ravein. Ravein sex.
+SPLASHTEXT SOMEWHERE IN POLOVICH FORESTS.
+SPLASHTEXT Willets in my yard!
+SPLASHTEXT Big big Chungus! Big Chungus!
+SPLASHTEXT And thats why I love chaos
+SPLASHTEXT KAOTIKA 4D
+SPLASHTEXT Also play Panopticon!
+SPLASHTEXT Also play ApelsinBay!
+SPLASHTEXT Also play Rouge Survival!
+SPLASHTEXT Also play Afghan 14!
+SPLASHTEXT Better than lfwb in 11 times!
+SPLASHTEXT Underfloor. Play now.
+SPLASHTEXT Pharmakon reimagined
+SPLASHTEXT ПИДОРАСЫ
+SPLASHTEXT WILLET POWER!!
+SPLASHTEXT Emonei pleas giv us host bakk! :<
+SPLASHTEXT Идите все нахуй
+SPLASHTEXT ВЫШЕЛ СВИНТУС НА ОХОТУ!
+SPLASHTEXT Life Is Crazy!
+SPLASHTEXT HAIL BVLE!
